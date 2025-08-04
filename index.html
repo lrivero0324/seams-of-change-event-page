@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seams of Change - The Threads We Leave Behind</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700;900&family=Inter:wght@300;400;500;600&display=swap');
+        
+                /* Navigation Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(34, 38, 62, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(252, 251, 241, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .navbar.scrolled {
+            background: rgba(34, 38, 62, 0.98);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .nav-logo {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #FCFBF1;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+            transition: all 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            color: goldenrod;
+            transform: translateY(-1px);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2.5rem;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #FCFBF1;
+            text-decoration: none;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #af6427;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #af6427;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: #cc834b;
+;
+        }
+
+        /* Mobile menu styles */
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #FCFBF1;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .nav-toggle.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .nav-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-toggle.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-logo {
+                font-size: 1.5rem;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(34, 38, 62, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                border-bottom: 1px solid rgba(252, 251, 241, 0.1);
+            }
+
+            .nav-menu.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .nav-link {
+                font-size: 1.1rem;
+                padding: 0.8rem 0;
+                text-align: center;
+            }
+        }
+
+        /* Adjust hero section for navbar */
+        .hero {
+            padding-top: 80px; /* Account for fixed navbar */
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding-top: 70px;
+            }
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #3C2115;
+            background: #FCFBF1;
+        }
+
+        .hero {
+            background: #22263E;
+            color: #FCFBF1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+    
+    /* Add background image - replace 'image1.jpg' with your chosen image filename */
+            background-image: linear-gradient(rgba(34, 38, 62, 0.75), rgba(34, 38, 62, 0.75)), url('images/valna-studio-mU88MlEFcoU-unsplash.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; 
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+            letter-spacing: -0.02em;
+        }
+
+        .hero .tagline {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-style: italic;
+            font-weight: 400;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            letter-spacing: 0.01em;
+        }
+
+        .cta-button {
+            background: #af6427;
+            color: #FCFBF1;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(143, 94, 54, 0.3);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(143, 94, 54, 0.4);
+            background: #cc834b;
+        }
+
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .stats-section {
+            background: #FCFBF1;
+            padding: 5rem 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            justify-items: center;
+        }
+
+        .stat-card {
+            background: #FCFBF1;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(60, 33, 21, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(143, 94, 54, 0.1);
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(60, 33, 21, 0.15);
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #8F5E36;
+            margin-bottom: 0.8rem;
+            line-height: 1;
+        }
+
+        .stat-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #3C2115;
+            line-height: 1.4;
+        }
+
+        .experience-section {
+            background: #2A3B19;
+            color: #FCFBF1;
+            padding: 5rem 2rem;
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            justify-items: center;
+        }
+
+        .experience-card {
+            background: rgba(252,251,241,0.12);
+            padding: 2.5rem;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(252,251,241,0.2);
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .experience-card:hover {
+            transform: translateY(-5px);
+            background: rgba(252,251,241,0.18);
+        }
+
+        .experience-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            line-height: 1.3;
+        }
+
+        .experience-card p {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .quote-section {
+            background: #3C2115;
+            color: #FCFBF1;
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .quote {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-style: italic;
+            font-weight: 400;
+            max-width: 900px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            letter-spacing: -0.01em;
+        }
+
+        .quote-author {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            opacity: 0.85;
+        }
+
+        .location-section {
+            padding: 5rem 2rem;
+            background: #FCFBF1;
+        }
+
+        .location-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .action-section {
+            background: #8F5E36;
+            color: #FCFBF1;
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            max-width: 1000px;
+            margin: 3rem auto 0;
+            justify-items: center;
+        }
+
+        .action-card {
+            background: rgba(252,251,241,0.15);
+            padding: 2.5rem;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(252,251,241,0.2);
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .action-card:hover {
+            background: rgba(252,251,241,0.22);
+            transform: translateY(-3px);
+        }
+
+        .action-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.3;
+        }
+
+        .action-card p {
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: #3C2115;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+            line-height: 1.7;
+            margin-bottom: 1.8rem;
+            max-width: 800px;
+            color: #3C2115;
+        }
+
+        .experience-section h2,
+        .quote-section h2,
+        .action-section h2 {
+            color: #FCFBF1;
+        }
+
+        .highlight {
+            background: rgba(143, 94, 54, 0.15);
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            color: #3C2115;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+                line-height: 1.1;
+            }
+            
+            .hero .tagline {
+                font-size: 1.4rem;
+            }
+            
+            .stats-grid,
+            .experience-grid,
+            .action-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .section h2 {
+                font-size: 2.2rem;
+            }
+            
+            .quote {
+                font-size: 1.6rem;
+            }
+            
+            .section {
+                padding: 3rem 1.5rem;
+            }
+            
+            .stats-section,
+            .location-section,
+            .experience-section,
+            .action-section {
+                padding: 3rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">Seams of Change</a>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link active">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#exhibits" class="nav-link">Exhibits</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Seams of Change</h1>
+            <p class="tagline">The Threads We Leave Behind</p>
+
+            <a href="#reserve" class="cta-button">Reserve Your Free Ticket</a>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="section">
+        <h2>Our Mission</h2>
+        <p><strong>Seams of Change</strong> is an interactive exhibit that exposes the environmental and ethical costs of fast fashion. Through immersive storytelling, data, and design, it challenges visitors to rethink their clothing choices and embrace sustainable alternatives.</p>
+        <p>From excessive water usage and carbon emissions to textile waste and microplastic pollution, the fast fashion industry is one of the most damaging forces in modern consumer culture. Yet most people remain unaware of how their clothing choices fuel this crisis.</p>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <h2>The Hidden Cost of Fast Fashion</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">100B</div>
+                <div class="stat-text">Garments produced globally every year</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">10%</div>
+                <div class="stat-text">Of global carbon emissions from fashion</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">20%</div>
+                <div class="stat-text">Of global wastewater from fashion manufacturing</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">70 lbs</div>
+                <div class="stat-text">Of clothing discarded per person annually in the US</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="experience-section">
+        <div class="section">
+            <h2>Your Journey Through the Exhibit</h2>
+            <div class="experience-grid">
+                <div class="experience-card">
+                    <h3>"Life of a T-Shirt" Journey</h3>
+                    <p>Walk through a timeline tracing a basic T-shirt's lifecycle—from fossil fuel extraction to mass production, international shipping, and eventual landfill or incineration.</p>
+                </div>
+                <div class="experience-card">
+                    <h3>Microfiber + Pollution Zone</h3>
+                    <p>Experience a live demo showing how synthetic clothing sheds microplastic fibers in the wash, using magnification and water tanks to reveal what's usually invisible.</p>
+                </div>
+                <div class="experience-card">
+                    <h3>Beyond the Tag</h3>
+                    <p>Scan digital tags on displayed garments to reveal the full environmental cost and labor journey behind everyday fashion.</p>
+                </div>
+                <div class="experience-card">
+                    <h3>Patch-Making Workshop</h3>
+                    <p>Participate in a creative corner where visitors design fabric patches to express sustainable fashion goals or statements.</p>
+                </div>
+                <div class="experience-card">
+                    <h3>Fast Fashion Landfill Wall</h3>
+                    <p>A striking visual display of what 11 million tons of annual U.S. clothing waste looks like—scaled to show the 70 lbs discarded per person.</p>
+                </div>
+                <div class="experience-card">
+                    <h3>Worker Stories</h3>
+                    <p>Learn about the human cost: 9 in 10 garment workers are not paid a living wage. Hear their stories and understand the true price of cheap fashion.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote Section -->
+    <section class="quote-section">
+        <div class="quote">
+            "Plastic pollution is more than an environmental crisis. It's a public health and a human rights crisis."
+        </div>
+        <div class="quote-author">
+            — Cassia Patel, Oceanic Global
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section class="location-section">
+        <div class="location-content">
+            <h2>Visit Us</h2>
+            <p><strong>Miami Center of Design</strong><br>
+            Miami, Florida</p>
+            <p><strong>October 18–22, 2025</strong><br>
+            Open Daily | 10:00 AM – 6:00 PM</p>
+            <p><strong>Free Admission | RSVP Required</strong></p>
+            <p>Join us for this groundbreaking exhibition that will change how you think about the clothes in your closet. Located in the heart of Miami's design district, this is your chance to see the hidden impact of fast fashion and learn how to make a difference.</p>
+        </div>
+    </section>
+
+    <!-- Action Section -->
+    <section class="action-section">
+        <h2>Take Action</h2>
+        <p>Your visit doesn't end when you leave the exhibit. Here's how you can continue making a difference:</p>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>Watch Our Video</h3>
+                <p>See a short introduction to the exhibit and why sustainable fashion matters for our planet's future.</p>
+                <a href="#video" class="cta-button" style="background: rgba(255,255,255,0.2); margin-top: 1rem;">Watch Now</a>
+            </div>
+            <div class="action-card">
+                <h3>Read the Full Interview</h3>
+                <p>Dive deeper with Cassia Patel's complete interview on microfiber pollution and ocean health.</p>
+                <a href="#interview" class="cta-button" style="background: rgba(255,255,255,0.2); margin-top: 1rem;">Read More</a>
+            </div>
+            <div class="action-card">
+                <h3>Follow Our Journey</h3>
+                <p>Get sustainable fashion tips and updates on Instagram and TikTok. Join our growing community of conscious consumers.</p>
+                <a href="#social" class="cta-button" style="background: rgba(255,255,255,0.2); margin-top: 1rem;">Follow Us</a>
+            </div>
+            <div class="action-card" id="reserve">
+                <h3>Reserve Your Ticket</h3>
+                <p>Free timed entry ensures everyone gets the full experience. Book your visit to Seams of Change today.</p>
+                <a href="#tickets" class="cta-button" style="background: rgba(255,255,255,0.2); margin-top: 1rem;">Get Tickets</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pledge Section -->
+    <section class="section" style="background: #FCFBF1; color: #3C2115; padding: 5rem 2rem;">
+        <h2 style="color: #3C2115; margin-bottom: 1.5rem;">Join the Pledge for Conscious Consumption</h2>
+        <p style="font-size: 1.3rem; margin-bottom: 3rem; max-width: 600px;">Commit to making more thoughtful clothing choices that consider the environmental and social impact of your purchases.</p>
+        <form style="max-width: 500px; margin: 0 auto; display: flex; border-radius: 50px; overflow: hidden; box-shadow: 0 8px 30px rgba(60, 33, 21, 0.15);">
+            <input type="email" placeholder="Enter your email" style="flex: 1; padding: 1.2rem 1.5rem; border: none; font-size: 1rem; font-family: 'Inter', sans-serif; background: white; color: #3C2115;">
+            <button type="submit" style="padding: 1.2rem 2rem; background: #8F5E36; color: #FCFBF1; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.3s ease;">Sign the Pledge</button>
+        </form>
+    </section>
+
+    <script>
+        // Simple animation for stat numbers
+        const statNumbers = document.querySelectorAll('.stat-number');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'countUp 1s ease-out';
+                }
+            });
+        });
+
+        statNumbers.forEach(stat => observer.observe(stat));
+
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form submission handler
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for joining the pledge! Together, we can create change in the fashion industry.');
+            this.reset();
+        });
+    </script>
+
+    <style>
+        @keyframes countUp {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</body>
+</html>
